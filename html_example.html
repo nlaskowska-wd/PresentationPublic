@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quarterly Sales Dashboard</title>
+  <style>
+    :root{
+      --bg: #0f172a;         --card:#111827;    --text:#e5e7eb;
+      --muted:#9ca3af;       --accent:#38bdf8;  --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444;
+      --border:#1f2937;      --chip:#0ea5e9;
+    }
+    [data-theme="light"]{
+      --bg:#f8fafc; --card:#ffffff; --text:#0f172a; --muted:#475569; --border:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font:14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background:var(--bg); color:var(--text);
+    }
+    header{
+      position:sticky; top:0; z-index:10;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 18px; border-bottom:1px solid var(--border); background:var(--bg);
+    }
+    header h1{font-size:18px; margin:0}
+    .chip{display:inline-flex; gap:6px; align-items:center; background:rgba(56,189,248,.12); color:var(--accent);
+      border:1px solid rgba(56,189,248,.35); padding:4px 8px; border-radius:999px; font-weight:600}
+    .container{max-width:1100px; margin:20px auto; padding:0 16px}
+    .grid{display:grid; gap:16px}
+    .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .two-col{grid-template-columns:2fr 1fr}
+    @media (max-width:900px){.kpis,.two-col{grid-template-columns:1fr}}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; box-shadow:0 1px 0 rgba(0,0,0,.05)}
+    .muted{color:var(--muted)}
+    .row{display:flex; align-items:center; justify-content:space-between}
+    .kpi h3{margin:0 0 6px 0; font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em}
+    .kpi .value{font-size:28px; font-weight:700}
+    .trend{font-weight:600}
+    .trend.up{color:var(--ok)} .trend.down{color:var(--bad)}
+    table{width:100%; border-collapse:collapse}
+    th, td{padding:10px 8px; border-bottom:1px solid var(--border)}
+    th{font-size:12px; text-align:left; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); cursor:pointer}
+    tr:hover td{background:rgba(148,163,184,.06)}
+    .badge{padding:2px 8px; border-radius:999px; font-size:12px; border:1px solid var(--border)}
+    .ok{background:rgba(34,197,94,.12); color:#22c55e}
+    .warn{background:rgba(245,158,11,.12); color:#f59e0b}
+    .bad{background:rgba(239,68,68,.12); color:#ef4444}
+    .toolbar{display:flex; gap:8px; align-items:center}
+    .btn{background:transparent; color:var(--text); border:1px solid var(--border); padding:8px 10px; border-radius:10px; cursor:pointer}
+    .btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+    .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+    .footer{color:var(--muted); text-align:center; padding:24px 0}
+    /* mini bar chart */
+    .bars{display:flex; gap:6px; align-items:flex-end; height:60px}
+    .bar{flex:1; background:linear-gradient(180deg, rgba(56,189,248,.9), rgba(56,189,248,.4)); border-radius:6px}
+    .legend{display:flex; gap:12px; color:var(--muted); font-size:12px; margin-top:8px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="row" aria-label="Brand and context">
+      <h1>Quarterly Sales Dashboard</h1>
+      <span class="chip" aria-label="Period">Q2&nbsp;2025</span>
+    </div>
+    <div class="toolbar">
+      <button id="themeBtn" class="btn" aria-pressed="false" aria-label="Toggle theme">Toggle theme</button>
+      <button class="btn" onclick="window.print()">Print</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- KPIs -->
+    <section class="grid kpis" aria-labelledby="kpis-title">
+      <h2 id="kpis-title" class="sr-only">Key performance indicators</h2>
+
+      <article class="card kpi" role="group" aria-roledescription="kpi" aria-label="Total revenue">
+        <h3>Total Revenue</h3>
+        <div class="row">
+          <div class="value">$5.47M</div>
+          <div class="trend up" aria-label="Up 12%">▲ 12%</div>
+        </div>
+        <p class="muted">vs Q1 2025</p>
+      </article>
+
+      <article class="card kpi" role="group" aria-roledescription="kpi" aria-label="Conversion rate">
+        <h3>Conversion Rate</h3>
+        <div class="row">
+          <div class="value">3.8%</div>
+          <div class="trend up" aria-label="Up 0.4pp">▲ 0.4pp</div>
+        </div>
+        <p class="muted">Website → Purchase</p>
+      </article>
+
+      <article class="card kpi" role="group" aria-roledescription="kpi" aria-label="Customer churn">
+        <h3>Customer Churn</h3>
+        <div class="row">
+          <div class="value">2.1%</div>
+          <div class="trend down" aria-label="Down 0.3pp">▼ 0.3pp</div>
+        </div>
+        <p class="muted">Monthly</p>
+      </article>
+    </section>
+
+    <!-- Chart + Summary -->
+    <section class="grid two-col" style="margin-top:16px">
+      <article class="card" aria-labelledby="spark-title">
+        <h3 id="spark-title" style="margin:0 0 8px 0;">Quarterly Units Sold</h3>
+        <div class="bars" role="img" aria-label="Units per product in Q2 2025">
+          <div class="bar" style="height:85%" title="Product A: 12,500"></div>
+          <div class="bar" style="height:56%" title="Product B: 8,300"></div>
+          <div class="bar" style="height:32%" title="Product C: 4,750"></div>
+          <div class="bar" style="height:20%" title="Services: 3,000"></div>
+          <div class="bar" style="height:44%" title="Subscriptions: 6,500"></div>
+        </div>
+        <div class="legend">
+          <span>🅰︎ A</span><span>🅱︎ B</span><span>🅲 C</span><span>🛠 Services</span><span>🔁 Subs</span>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="insights-title">
+        <h3 id="insights-title" style="margin:0 0 8px 0;">Insights</h3>
+        <ul>
+          <li>Product A leads with strong YoY momentum.</li>
+          <li>Product B declined slightly due to seasonality.</li>
+          <li>Subscriptions grew 9% after pricing revamp.</li>
+        </ul>
+        <details>
+          <summary>Methodology</summary>
+          <p class="muted">All metrics are based on paid orders, excluding refunds and VAT.</p>
+        </details>
+      </article>
+    </section>
+
+    <!-- Sortable table -->
+    <section class="card" style="margin-top:16px" aria-labelledby="tbl-title">
+      <div class="row" style="margin-bottom:8px">
+        <h3 id="tbl-title" style="margin:0">Products – Detail</h3>
+        <span class="muted">Click headers to sort</span>
+      </div>
+      <table id="products">
+        <thead>
+          <tr>
+            <th data-key="name">Product</th>
+            <th data-key="q1" aria-sort="none">Q1 Units</th>
+            <th data-key="q2" aria-sort="none">Q2 Units</th>
+            <th data-key="growth" aria-sort="none">Growth %</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Product A</td><td>10850</td><td>12500</td><td>15</td>
+            <td><span class="badge ok">Healthy</span></td>
+          </tr>
+          <tr>
+            <td>Product B</td><td>8750</td><td>8300</td><td>-5</td>
+            <td><span class="badge warn">Watch</span></td>
+          </tr>
+          <tr>
+            <td>Product C</td><td>0</td><td>4750</td><td>—</td>
+            <td><span class="badge ok">New</span></td>
+          </tr>
+          <tr>
+            <td>Services</td><td>2600</td><td>3000</td><td>15</td>
+            <td><span class="badge ok">Healthy</span></td>
+          </tr>
+          <tr>
+            <td>Subscriptions</td><td>5950</td><td>6500</td><td>9</td>
+            <td><span class="badge ok">Growing</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Last updated: Aug 21, 2025 • Source: Internal BI
+  </footer>
+
+  <script>
+    // theme toggle
+    const btn = document.getElementById('themeBtn');
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    document.body.dataset.theme = prefersLight ? 'light' : 'dark';
+    btn.addEventListener('click', () => {
+      const isLight = document.body.dataset.theme === 'light';
+      document.body.dataset.theme = isLight ? 'dark' : 'light';
+      btn.setAttribute('aria-pressed', String(!isLight));
+    });
+
+    // sortable table
+    const table = document.getElementById('products');
+    const getCellNumber = (row, idx) => {
+      const v = row.children[idx].textContent.trim();
+      if (v === '—') return Number.NEGATIVE_INFINITY;
+      const n = Number(v.replace(/[^0-9.-]/g,''));
+      return isNaN(n) ? v.toLowerCase() : n;
+    };
+    table.querySelectorAll('th[data-key]').forEach((th, idx)=>{
+      th.addEventListener('click', ()=>{
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.rows);
+        const current = th.getAttribute('aria-sort') || 'none';
+        table.querySelectorAll('th[aria-sort]').forEach(t=>t.setAttribute('aria-sort','none'));
+        const dir = current === 'ascending' ? 'descending' : 'ascending';
+        th.setAttribute('aria-sort', dir);
+        rows.sort((a,b)=>{
+          const va = getCellNumber(a, idx);
+          const vb = getCellNumber(b, idx);
+          if (va < vb) return dir==='ascending' ? -1 : 1;
+          if (va > vb) return dir==='ascending' ? 1 : -1;
+          return 0;
+        });
+        rows.forEach(r=>tbody.appendChild(r));
+      });
+    });
+  </script>
+</body>
+</html>
