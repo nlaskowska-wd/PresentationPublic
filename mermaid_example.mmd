@@ -1,0 +1,10 @@
+flowchart LR
+    A[Start: Customer Visit] --> B{Interested?}
+    B -->|Yes| C[Add to Cart]
+    B -->|No| D[Exit Site]
+    C --> E{Checkout Completed?}
+    E -->|Yes| F[Order Confirmed]
+    E -->|No| G[Abandoned Cart]
+    F --> H[End]
+    D --> H
+    G --> H
