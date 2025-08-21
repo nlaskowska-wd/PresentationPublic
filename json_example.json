@@ -1,0 +1,35 @@
+{
+  "report": {
+    "title": "Quarterly Sales Report",
+    "quarter": "Q2 2025",
+    "summary": "This report summarizes the sales performance for the second quarter of 2025.",
+    "metrics": {
+      "Product A": {
+        "q1_sales": 10850,
+        "q2_sales": 12500,
+        "growth_percent": 15
+      },
+      "Product B": {
+        "q1_sales": 8750,
+        "q2_sales": 8300,
+        "growth_percent": -5
+      },
+      "Product C": {
+        "q1_sales": 0,
+        "q2_sales": 4750,
+        "growth_percent": null,
+        "status": "new launch"
+      }
+    },
+    "insights": [
+      "Product A continues to dominate the market.",
+      "Product B shows a slight decline due to seasonality.",
+      "Product C had a strong launch, exceeding expectations."
+    ],
+    "next_steps": [
+      "Increase marketing budget for Product B",
+      "Expand distribution for Product C",
+      "Prepare early forecast for Q3"
+    ]
+  }
+}
