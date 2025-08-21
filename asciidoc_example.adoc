@@ -1,0 +1,24 @@
+== Quarterly Sales Report
+
+=== Overview
+
+This report summarizes the sales performance for Q2 2025.
+
+==== Key Metrics
+
+* *Product A*: 12,500 units (↑ 15% compared to Q1)
+* *Product B*: 8,300 units (↓ 5% compared to Q1)
+* *Product C*: 4,750 units (new launch)
+
+==== Insights
+
+* Product A continues to dominate the market.
+* Product B shows a slight decline, mainly due to seasonality.
+* Product C had a strong launch, exceeding expectations.
+
+==== Next Steps
+
+[arabic]
+. Increase marketing budget for Product B.
+. Expand distribution for Product C.
+. Prepare early forecast for Q3.
