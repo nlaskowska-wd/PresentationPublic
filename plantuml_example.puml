@@ -1,0 +1,27 @@
+@startuml
+title Sales Process (Q2 2025)
+
+skinparam backgroundColor #ffffff
+skinparam activity {
+  BackgroundColor<<ok>> #E6FFED
+  BackgroundColor<<warn>> #FFF5D6
+  BackgroundColor<<bad>> #FFE6E6
+  BorderColor #999999
+}
+
+start
+:Customer visits site;
+if (Interested?) then (yes)
+  :Add to cart;
+  if (Checkout completed?) then (yes)
+    :Order confirmed <<ok>>;
+    :Send confirmation email;
+  else (no)
+    :Abandoned cart <<warn>>;
+    :Trigger reminder email;
+  endif
+else (no)
+  :Exit site <<bad>>;
+endif
+stop
+@enduml
